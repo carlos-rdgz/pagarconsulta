@@ -47,6 +47,75 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes slideInField {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes spinIcon {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         
         h1 {
             text-align: center;
@@ -55,12 +124,23 @@
             font-size: 28px;
             font-weight: 600;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            animation: slideDown 0.6s ease-out;
         }
         
         .form-group {
             margin-bottom: 25px;
             position: relative;
+            animation: slideInField 0.6s ease-out backwards;
         }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
         
         label {
             display: block;
@@ -81,6 +161,18 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             font-family: inherit;
+            position: relative;
+        }
+
+        input::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            border-radius: 12px;
         }
         
         input::placeholder {
@@ -91,13 +183,14 @@
             outline: none;
             border-color: #4ade80;
             background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), inset 0 0 10px rgba(74, 222, 128, 0.1);
             transform: translateY(-2px);
         }
 
         input.input-error {
             border-color: #ef4444 !important;
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.3) !important;
+            animation: shake 0.4s ease-in-out;
         }
 
         textarea {
@@ -166,15 +259,33 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            animation: slideInField 0.6s ease-out 0.9s backwards;
         }
-        
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(74, 222, 128, 0.4);
+            box-shadow: 0 15px 30px rgba(74, 222, 128, 0.4), 0 0 20px rgba(74, 222, 128, 0.2);
         }
-        
+
         .submit-btn:active {
             transform: translateY(-1px);
+        }
+
+        .submit-btn:active::before {
+            animation: ripple 0.6s ease-out;
         }
         
         .success-modal {
@@ -188,6 +299,8 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: fadeInUp 0.3s ease-out;
+            backdrop-filter: blur(5px);
         }
         
         .success-content {
@@ -212,18 +325,21 @@
             font-size: 60px;
             color: #22c55e;
             margin-bottom: 20px;
+            animation: spinIcon 0.6s ease-out, pulseGlow 2s ease-in-out 0.6s;
         }
-        
+
         .success-title {
             font-size: 24px;
             font-weight: 600;
             color: #1f2937;
             margin-bottom: 10px;
+            animation: slideDown 0.5s ease-out 0.3s backwards;
         }
-        
+
         .success-text {
             color: #6b7280;
             margin-bottom: 30px;
+            animation: slideDown 0.5s ease-out 0.5s backwards;
         }
         
         .close-btn {
@@ -234,11 +350,18 @@
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            animation: slideDown 0.5s ease-out 0.7s backwards;
         }
-        
+
         .close-btn:hover {
             background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .close-btn:active {
+            transform: translateY(0);
         }
         
         @media (max-width: 600px) {
