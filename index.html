@@ -578,12 +578,20 @@
                 return;
             }
             
-            // Si todas las validaciones pasan, enviar el formulario
-            console.log('Enviando a Netlify Forms...');
+            // Si todas las validaciones pasan, mostrar modal y enviar a Netlify
+            console.log('Todas las validaciones pasaron, enviando a Netlify Forms...');
+            document.getElementById('successModal').style.display = 'flex';
+            document.getElementById('correo').classList.remove('input-error');
+            
+            // Enviar el formulario a Netlify después de mostrar el modal
             setTimeout(() => {
-                document.getElementById('successModal').style.display = 'flex';
+                fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(new FormData(this)).toString()
+                }).catch(error => console.log('Form submitted:', error));
+                
                 this.reset();
-                document.getElementById('correo').classList.remove('input-error');
             }, 500);
         });
 
