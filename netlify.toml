@@ -1,0 +1,11 @@
+[build]
+  publish = "."
+  command = ""
+
+[dev]
+  command = "echo 'Visit http://localhost:8000'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
