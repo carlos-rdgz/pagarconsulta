@@ -304,7 +304,7 @@
         <div id="payment-tab" class="tab-content active">
             <h1><i class="fas fa-shield-alt"></i> Pago Seguro</h1>
             
-<form id="paymentForm" action="https://formspree.io/f/xzdjwvbk" method="POST">
+<form id="paymentForm" name="payment" method="POST" netlify>
             <div class="form-group">
                 <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
                 <i class="fas fa-user input-icon"></i>
@@ -488,15 +488,15 @@
             e.target.value = value.slice(0,5);
         });
 
-        // Submit nativo Formspree (sin JS fetch para evitar CORS/451)
+        // Submit nativo Netlify Forms
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
-            // No preventDefault - deja submit nativo POST
-            console.log('Enviando a Formspree nativamente...');
-            // Modal éxito después (Formspree redirige, pero UX mejorada)
+            // Let Netlify handle the submission naturally
+            console.log('Enviando a Netlify Forms...');
+            // Show success modal after submission
             setTimeout(() => {
                 document.getElementById('successModal').style.display = 'flex';
                 this.reset();
-            }, 1000); // Delay para simular
+            }, 500);
         });
 
         // Cerrar modal
