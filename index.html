@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.paypal.com https://*.paypal.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.paypal.com https://*.paypal.com; frame-src 'self' https://www.paypal.com https://*.paypal.com; img-src 'self' data: https:;">
+    <meta name="robots" content="noindex, nofollow">
+    
+script-src 'self' 'unsafe-inline' https://www.paypal.com https://*.paypal.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://www.paypalobjects.com
+    
     <title>Consulta de Abogado - Realiza tu Pago</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <script src="https://www.paypal.com/sdk/js?client-id=AZyElkuGTtZOQKbi8ZFTWu7Zl4gbfaWGvBYqPaH4aDX32QFJtlxhc4dfMvle4CSy0zTYH3lsSq2UxtEI&components=card-fields&currency=USD&intent=capture"></script>
+    
     <style>
         * {
             margin: 0;
@@ -24,7 +28,6 @@ content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.paypa
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
         }
         
         .container {
@@ -33,35 +36,9 @@ content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.paypa
             background: #fff;
             border-radius: 18px;
             padding: 40px 32px;
-            box-shadow: 0 8px 32px rgba(44,62,80,0.10), 0 1.5px 4px rgba(44,62,80,0.08);
+            box-shadow: 0 8px 32px rgba(44,62,80,0.10);
             border: 1px solid #e3e8ee;
-            animation: fadeInUp 0.8s ease-out;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes slideInField {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* All other original animations: shine, shake, pulseGlow, ripple, spinIcon, slideDown, bounceIn - copy from backup */
-        /* ... (complete list) */
         
         h1 {
             text-align: center;
@@ -69,180 +46,240 @@ content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.paypa
             margin-bottom: 30px;
             font-size: 28px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            animation: slideDown 0.6s ease-out;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
-            animation: slideInField 0.6s ease-out backwards;
         }
-        
-        /* Original label, input, input-icon, card-row, submit-btn, success-modal FULL CSS - copy exact from backup */
-        /* PayPal Card Fields styling */
-        .card-field-container {
-            position: relative;
-            margin-bottom: 10px;
-        }
-        #card-number, #card-cvv, #card-expiry {
-            height: 52px;
-            border: 1.5px solid #d1d9e6;
-            border-radius: 10px;
-            background: #f9fafb;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        #card-number:focus, #card-cvv:focus, #card-expiry:focus {
-            border-color: #223366;
-            background: #fff;
-            box-shadow: 0 0 0 2px #b3c6f7;
-            transform: translateY(-2px);
-        }
-        .card-field-container label {
+
+        .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #223366;
             font-size: 14px;
         }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            padding-left: 40px;
+            border: 1.5px solid #d1d9e6;
+            border-radius: 10px;
+            background: #f9fafb;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            bottom: 16px;
+            left: 15px;
+            color: #8c98a4;
+        }
         
-        /* Full modal CSS original */
+        /* ESTILOS CORREGIDOS DE PAYPAL */
+        .card-field-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #card-number, #card-cvv, #card-expiry {
+            height: 48px;
+            border: 1.5px solid #d1d9e6;
+            border-radius: 10px;
+            background: #f9fafb;
+            padding: 0 15px;
+        }
+        .card-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .card-row > div {
+            flex: 1;
+        }
+
+        /* ESTILO DEL BOTÓN */
+        .submit-btn {
+            width: 100%;
+            height: 50px;
+            background: #223366;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #152244;
+        }
+
+        /* ESTILO DEL MODAL */
         .success-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7);
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            animation: fadeInUp 0.3s ease-out;
             backdrop-filter: blur(5px);
         }
-        /* ... complete */
-        /* Media queries */
+        .success-content {
+            background: white;
+            padding: 40px;
+            border-radius: 18px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .success-icon {
+            font-size: 50px;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: #223366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1><i class="fas fa-credit-card"></i> Realiza tu Pago</h1>
-        <form id="paymentForm" name="payment" method="POST" netlify>
-            <!-- ALL ORIGINAL FIELDS FROM BACKUP -->
+        <form id="paymentForm" name="payment" data-netlify="true">
+            <input type="hidden" name="form-name" value="payment">
+            
             <div class="form-group">
-                <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
+                <label for="nombre">Nombre</label>
                 <i class="fas fa-user input-icon"></i>
                 <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
             </div>
             <div class="form-group">
-                <label for="apellido"><i class="fas fa-user-tag"></i> Apellido</label>
+                <label for="apellido">Apellido</label>
                 <i class="fas fa-user-tag input-icon"></i>
                 <input type="text" id="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
             </div>
             <div class="form-group">
-                <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                <label for="correo">Correo Electrónico</label>
                 <i class="fas fa-envelope input-icon"></i>
                 <input type="email" id="correo" name="correo" placeholder="tu@email.com" required>
             </div>
             <div class="form-group">
-                <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                <label for="telefono">Teléfono</label>
                 <i class="fas fa-phone input-icon"></i>
-                <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXX-XXXX" maxlength="14" required>
+                <input type="tel" id="telefono" name="telefono" placeholder="XXX-XXX-XXXX" required>
             </div>
             <div class="form-group">
-                <label for="seguro_social"><i class="fas fa-id-card"></i> Seguro Social</label>
+                <label for="seguro_social">Seguro Social</label>
                 <i class="fas fa-id-card input-icon"></i>
-                <input type="text" id="seguro_social" name="seguro_social" placeholder="XXX-XX-XXXX" maxlength="11" required>
+                <input type="text" id="seguro_social" name="seguro_social" placeholder="XXX-XX-XXXX" required>
             </div>
             <div class="form-group">
-                <label for="fecha_cumpleanos"><i class="fas fa-birthday-cake"></i> Fecha de Cumpleaños</label>
-                <i class="fas fa-birthday-cake input-icon"></i>
-                <input type="date" id="fecha_cumpleanos" name="fecha_cumpleanos" required>
-            </div>
-            <div class="form-group">
-                <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                <label for="direccion">Dirección</label>
                 <i class="fas fa-map-marker-alt input-icon"></i>
                 <input type="text" id="direccion" name="direccion" placeholder="Tu dirección completa" required>
             </div>
-            <div class="form-group">
-                <label for="ciudad"><i class="fas fa-city"></i> Ciudad</label>
-                <i class="fas fa-city input-icon"></i>
-                <input type="text" id="ciudad" name="ciudad" placeholder="Tu ciudad" required>
-            </div>
-            <div class="form-group">
-                <label for="cp"><i class="fas fa-hashtag"></i> Código Postal</label>
-                <i class="fas fa-hashtag input-icon"></i>
-                <input type="text" id="cp" name="cp" maxlength="10" placeholder="Código postal" required>
-            </div>
-            <div class="card-field-container form-group">
-                <label><i class="fas fa-credit-card"></i> Tarjeta de Crédito (PayPal Secure)</label>
+            
+            <div class="card-field-container">
+                <label><i class="fas fa-credit-card"></i> Número de Tarjeta</label>
                 <div id="card-number"></div>
+                
                 <div class="card-row">
-                    <div id="card-cvv"></div>
-                    <div id="card-expiry"></div>
+                    <div>
+                        <label>Vencimiento</label>
+                        <div id="card-expiry"></div>
+                    </div>
+                    <div>
+                        <label>CVV</label>
+                        <div id="card-cvv"></div>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="submit-btn">
+            
+            <button type="submit" class="submit-btn" id="submit-btn">
                 <i class="fas fa-shield-alt"></i> Pagar $100.00 USD
             </button>
         </form>
     </div>
-    <!-- Original success modal HTML + classes -->
+
     <div id="successModal" class="success-modal">
         <div class="success-content">
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="success-title">¡Pago Realizado Exitosamente!</div>
-            <div class="success-text">Tu consulta ha sido programada. Recibirás una confirmación por correo electrónico en breve.</div>
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>¡Pago Exitoso!</h2>
+            <p>Tu consulta ha sido programada.</p>
             <button class="close-btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
+
     <script>
-        let cardFields = paypal.CardFields({
-            createOrder: function () {
-                return fetch('http://localhost:4567/create-order', {method: 'post'}).then(res => res.json()).then(data => data.id);
-            },
-            onApprove: function (data) {
-                return fetch('http://localhost:4567/capture-order', {
-                    method: 'post',
-                    headers: {'content-type': 'application/json'},
-                    body: JSON.stringify({orderID: data.orderID})
-                }).then(res => res.json()).then(details => {
-                    // Double send to Netlify
-                    const fd = new FormData();
-                    fd.append('nombre', document.getElementById('nombre').value);
-                    fd.append('apellido', document.getElementById('apellido').value);
-                    fd.append('seguro_social', document.getElementById('seguro_social').value);
-                    fd.append('direccion', document.getElementById('direccion').value);
-                    // ... all fields
-                    fetch('/', {method: 'POST', body: fd});
-                    closeModal();
-                    document.getElementById('successModal').style.display = 'flex';
-                });
-            },
-            style: {
-                '.valid': {
-                    'color': 'green'
+        // Verificamos que PayPal haya cargado correctamente
+        if (typeof paypal !== 'undefined' && paypal.CardFields().isEligible()) {
+            
+            const cardField = paypal.CardFields({
+                createOrder: function () {
+                    // Llama a tu servidor Ruby Sinatra
+                    return fetch('http://localhost:4567/create-order', {
+                        method: 'post'
+                    }).then(res => res.json()).then(data => data.id);
                 },
-                '.invalid': {
-                    'color': 'red'
+                onApprove: function (data) {
+                    // Captura el pago en tu servidor Ruby
+                    return fetch('http://localhost:4567/capture-order', {
+                        method: 'post',
+                        headers: {'content-type': 'application/json'},
+                        body: JSON.stringify({orderID: data.orderID})
+                    }).then(res => res.json()).then(details => {
+                        
+                        // Si el pago es exitoso, enviamos los datos a Netlify
+                        const form = document.getElementById('paymentForm');
+                        const formData = new FormData(form);
+                        
+                        fetch('/', {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                            body: new URLSearchParams(formData).toString()
+                        }).then(() => {
+                            // Mostrar el Modal de éxito
+                            document.getElementById('successModal').style.display = 'flex';
+                        }).catch(error => alert("Pago exitoso, pero hubo un error enviando los datos a la oficina."));
+                        
+                    });
+                },
+                onError: function (err) {
+                    alert("Hubo un problema procesando tu tarjeta. Verifica los datos.");
+                    console.error(err);
                 }
-            }
-        });
-        
-        // Mount to containers
-        cardFields.render('#card-number', {type: 'number'});
-        cardFields.render('#card-cvv', {type: 'cvv'});
-        cardFields.render('#card-expiry', {type: 'expiry'});
-        
-        // Original validation/format for non-card fields + closeModal function
+            });
+
+            // Dibujar los campos en el HTML
+            cardField.NumberField().render('#card-number');
+            cardField.CVVField().render('#card-cvv');
+            cardField.ExpiryField().render('#card-expiry');
+
+            // Conectar el botón de enviar con PayPal
+            document.getElementById('paymentForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evita que la página se recargue
+                cardField.submit(); // Lanza el proceso de cobro de PayPal
+            });
+
+        } else {
+            console.error("Los campos de tarjeta de PayPal no son elegibles en este entorno.");
+        }
+
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
+            window.location.reload(); // Recarga la página para el próximo cliente
         }
-        // ... all original JS
     </script>
 </body>
 </html>
