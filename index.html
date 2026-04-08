@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://www.paypal.com https://*.paypal.com; frame-src 'self' https://www.paypal.com https://*.paypal.com;">
     <title>Pago Consulta - $100 USD</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -18,17 +17,19 @@
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; }
         .form-group input { width: 100%; height: 48px; padding: 0 16px 0 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #fafbfc; font-size: 16px; transition: border-color 0.3s; }
         .form-group input:focus { outline: none; border-color: #223366; }
-        .input-icon { position: absolute; left: 16px; top: 52px; transform: translateY(-50%); color: #9ca3af; z-index: 1; }
-        #card-number, #card-expiry, #card-cvv { height: 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #fafbfc; margin-bottom: 8px; padding: 0 16px; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        .input-icon { position: absolute; left: 16px; top: 44px; transform: translateY(-50%); color: #9ca3af; z-index: 1; }
+        #card-number, #card-expiry, #card-cvv { height: 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #fafbfc; margin-bottom: 8px; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         .card-row { display: flex; gap: 12px; }
         .card-row > div { flex: 1; }
-        .submit-btn { width: 100%; height: 50px; background: #223366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-family: 'Poppins', sans-serif; }
+        .submit-btn { width: 100%; height: 50px; background: #223366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-family: 'Poppins', sans-serif; margin-top: 10px; }
         .submit-btn:hover { background: #1e2d50; }
+        .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         .success-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-        .success-content { background: white; padding: 40px; border-radius: 18px; text-align: center; max-width: 400px; }
+        .success-content { background: white; padding: 40px; border-radius: 18px; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .success-icon { font-size: 60px; color: #10b981; margin-bottom: 20px; }
-        .success-title { font-size: 24px; color: #111827; margin-bottom: 10px; }
-        .close-btn { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        .success-title { font-size: 24px; color: #111827; margin-bottom: 10px; font-weight: 600; }
+        .close-btn { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 20px; font-family: 'Poppins', sans-serif; }
+        .close-btn:hover { background: #059669; }
     </style>
 </head>
 <body>
@@ -51,77 +52,99 @@
                 <input type="tel" id="telefono" required>
             </div>
             <div class="form-group">
-                <label>Seguro Social (XXX-XX-XXXX)</label>
-                <i class="fas fa-id-card input-icon"></i>
-                <input type="text" id="ssn" required>
-            </div>
-            <div class="form-group">
                 <label>Dirección Completa</label>
                 <i class="fas fa-map-marker-alt input-icon"></i>
                 <input type="text" id="direccion" required>
             </div>
             <div class="form-group">
-                <label>Número de Tarjeta</label>
+                <label>Tarjeta de Crédito</label>
                 <div id="card-number"></div>
             </div>
             <div class="form-group">
-                <label>Vencimiento y CVV</label>
+                <label>Vencimiento / CVV</label>
                 <div class="card-row">
                     <div id="card-expiry"></div>
                     <div id="card-cvv"></div>
                 </div>
             </div>
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-lock"></i> Pagar $100.00 USD
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Pagar $100.00 USD
             </button>
         </form>
     </div>
     <div id="successModal" class="success-modal">
         <div class="success-content">
             <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-            <h2 class="success-title">¡Pago Exitoso!</h2>
-            <p>Tu pago ha sido procesado. Consulta confirmada.</p>
+            <h2>¡Pago Exitoso!</h2>
+            <p>Tu consulta ha sido confirmada. Recibirás email pronto.</p>
             <button class="close-btn" onclick="closeModal()">Listo</button>
         </div>
     </div>
     <script>
-        let cardFields;
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof paypal === 'undefined') {
-                console.error('PayPal SDK not loaded');
-                return;
-            }
-            if (paypal.CardFields().isEligible()) {
-                cardFields = paypal.CardFields({
-                    createOrder: function() {
-                        return fetch('/create-order', {method: 'POST'}).then(r => r.json()).then(data => data.id);
-                    },
-                    onApprove: function(data) {
-                        return fetch('/capture-order', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({orderID: data.orderID})
-                        }).then(r => r.json()).then(() => {
-                            document.getElementById('successModal').style.display = 'flex';
-                        });
-                    }
-                });
-                cardFields.render('#card-number', 'number');
-                cardFields.render('#card-expiry', 'expiry');
-                cardFields.render('#card-cvv', 'cvv');
-            } else {
-                console.error('PayPal Card Fields not eligible');
-            }
-        });
+        let cardFields = null;
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('paymentForm');
+        const modal = document.getElementById('successModal');
         
-        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        // Poll for PayPal SDK
+        function initCardFields() {
+            if (typeof paypal !== 'undefined' && paypal.CardFields) {
+                const eligible = paypal.CardFields().isEligible();
+                if (eligible) {
+                    cardFields = paypal.CardFields({
+                        createOrder: function(data, actions) {
+                            return fetch('/create-order', { method: 'POST' })
+                                .then(res => res.json())
+                                .then(data => data.id)
+                                .catch(err => {
+                                    console.error('Create order error:', err);
+                                    throw err;
+                                });
+                        },
+                        onApprove: function(data, actions) {
+                            return fetch('/capture-order', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ orderID: data.orderID })
+                            }).then(res => res.json()).then(captureData => {
+                                modal.style.display = 'flex';
+                                form.reset();
+                                submitBtn.disabled = false;
+                            }).catch(err => {
+                                console.error('Capture error:', err);
+                                submitBtn.disabled = false;
+                            });
+                        },
+                        onError: function(err) {
+                            console.error('PayPal error:', err);
+                            submitBtn.disabled = false;
+                        }
+                    });
+                    cardFields.render('#card-number', 'number');
+                    cardFields.render('#card-expiry', 'expiry');
+                    cardFields.render('#card-cvv', 'cvv');
+                    console.log('CardFields rendered');
+                } else {
+                    console.error('PayPal Card Fields not eligible in this browser');
+                }
+            } else {
+                setTimeout(initCardFields, 250);
+            }
+        }
+        
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            cardFields.submit();
+            if (cardFields) {
+                submitBtn.disabled = true;
+                cardFields.submit();
+            }
         });
         
         function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
+            modal.style.display = 'none';
         }
+        
+        window.addEventListener('load', initCardFields);
     </script>
 </body>
 </html>
