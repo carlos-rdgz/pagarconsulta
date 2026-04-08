@@ -1,6 +1,7 @@
 [build]
   publish = "."
-  command = ""
+  command = "npm install --prefix netlify/functions"
+  functions = "netlify/functions"
 
 [dev]
   command = "echo 'Visit http://localhost:8000'"

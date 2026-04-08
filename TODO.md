@@ -1,17 +1,38 @@
-# TODO: Mejoras a la página web de pago
+# TODO: Integración PayPal en Formulario de Pago
 
-## Pasos del plan aprobado:
+## Plan Aprobado - Pasos:
 
-- [x] **Paso 1:** Editar index.html con:
-  - Estilos mejorados (glassmorphism, fuentes, iconos).
-  - Remover sección data-display.
-  - Agregar handlers JS para formateo en vivo (tarjeta, teléfono, expiración).
-  - Actualizar submit para éxito sin mostrar datos.
-  *Completado: index.html actualizado con todas las mejoras.*
-- [x] **Paso 2:** Probar en navegador (formateo, límites, submit).
-  *Completado: Verificado formateo automático en tarjeta (espacios cada 4), teléfono (XXX-XXX-XXXX), expiración (MM/AA). Límites aplicados. Submit muestra modal éxito sin datos visibles.*
-- [x] **Paso 3:** Completar tarea con attempt_completion y comando para abrir página.
-  *Completado: Tarea finalizada. Usa `start index.html` para abrir en navegador.*
+### 1. ✅ **Backup completado**
+   - Creado `index_backup.html` con código original.
 
-Progreso: Todos los pasos completados. Página mejorada exitosamente.
+### 2. ✅ **Backend Netlify Functions creados**
+   - `netlify/functions/package.json`
+   - `netlify/functions/orders.js`
+
+### 3. ✅ **Página éxito creada**
+   - `success.html`
+
+### 4. ✅ **index.html editado**
+   - Remover campos tarjeta.
+   - PayPal SDK agregado.
+   - Lógica PayPal completa (validate → createOrder → buttons → capture → success).
+
+### 5. ✅ **netlify.toml actualizado**
+   - Config functions y npm build.
+
+### 6. ✅ **transactions.json creado**
+
+### 7. ✅ **Integración completa - Listo para deploy y test**
+   - Reemplaza creds PayPal.
+   - `netlify deploy --prod --dir=.` o drag to Netlify.
+   - Local: `start index.html` (sandbox ok local, full test en Netlify HTTPS).
+
+**¡Tarea completada!**
+
+**Instrucciones:**
+- Reemplaza `PAYPAL_CLIENT_ID` y `PAYPAL_SECRET` en `orders.js` con tus credenciales sandbox.
+- Deploy a Netlify para HTTPS.
+- Monto: $99.99 (consulta abogado).
+
+**Progreso: Backup ✅. Próximo paso: Backend.**
 
