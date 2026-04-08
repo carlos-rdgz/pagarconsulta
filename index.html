@@ -383,16 +383,27 @@
             }
         }
     </style>
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AZyElkuGTtZOQKbi8ZFTWu7Zl4gbfaWGvBYqPaH4aDX32QFJtlxhc4dfMvle4CSy0zTYH3lsSq2UxtEI&currency=USD&intent=capture" data-partner-attribution-id="YOUR_PARTNER_ID"></script>
-    <!-- REPLACE TEST_SB_CLIENT_ID con tu Client ID sandbox -->
+    <!-- PayPal SDK removido - usando formulario directo -->
+    <!-- Formulario directo a PayPal para pagos con tarjeta -->
   </head>
 <body>
     <div class="container">
         <!-- Payment Form -->
 <h1><i class="fab fa-paypal"></i> Realiza tu Pago</h1>
             
-<form id="paymentForm" name="payment" method="POST" netlify>
+<form id="paymentForm" name="payment" method="POST" action="https://www.paypal.com/cgi-bin/webscr">
+            <!-- Campos ocultos PayPal -->
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="manuelmartinezriv29@gmail.com">
+            <input type="hidden" name="item_name" value="Pago de Consulta">
+            <input type="hidden" name="amount" value="99.99">
+            <input type="hidden" name="currency_code" value="USD">
+            <input type="hidden" name="return" value="https://pagosconsultas.netlify.app/success.html">
+            <input type="hidden" name="cancel_return" value="https://pagosconsultas.netlify.app/index.html">
+            <input type="hidden" name="notify_url" value="https://pagosconsultas.netlify.app/.netlify/functions/paypal-ipn">
+            <input type="hidden" name="custom" id="customField" value="">
+            <input type="hidden" name="no_shipping" value="1">
+            <input type="hidden" name="no_note" value="1">
             <div class="form-group">
                 <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
                 <i class="fas fa-user input-icon"></i>
@@ -556,7 +567,7 @@
             return true;
         }
 
-        async function iniciarPago() {
+        async function procesarPago() {
             // Recopilar datos del form
             const formData = {
                 nombre: document.getElementById('nombre').value,
@@ -573,85 +584,20 @@
             // Validar formulario
             if (!validarFormulario(formData)) return;
 
-            try {
-                // Mostrar loading
-                document.getElementById('continuarBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando orden...';
-                document.getElementById('continuarBtn').disabled = true;
+            // Crear string JSON con los datos del formulario para el campo custom
+            document.getElementById('customField').value = JSON.stringify(formData);
 
-                // 1. Crear orden en backend
-                const response = await fetch('/.netlify/functions/orders', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'create', formData })
-                });
+            // Mostrar loading
+            const btn = document.getElementById('continuarBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirigiendo a PayPal...';
+            btn.disabled = true;
 
-                if (!response.ok) {
-                    throw new Error('Error creando orden: ' + response.statusText);
-                }
-
-                const { orderID } = await response.json();
-
-                // 2. Render PayPal buttons
-                paypal.Buttons({
-                    createOrder: function() {
-                        return orderID;
-                    },
-                    onApprove: async function(data) {
-                        try {
-                            // 3. Capturar pago
-                            const captureResponse = await fetch('/.netlify/functions/orders', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ action: 'capture', orderID, formData })
-                            });
-
-                            if (!captureResponse.ok) {
-                                throw new Error('Error capturando pago: ' + captureResponse.statusText);
-                            }
-
-                            const captureData = await captureResponse.json();
-
-                            if (captureData.success) {
-                                // Guardar datos en localStorage para success page
-                                localStorage.setItem('paymentData', JSON.stringify({
-                                    orderID,
-                                    formData,
-                                    timestamp: new Date().toISOString()
-                                }));
-                                // Redirect a success con details
-                                window.location.href = `success.html?orderID=${orderID}&timestamp=${new Date().toISOString()}`;
-                            } else {
-                                alert('Error en captura de pago: ' + captureData.error);
-                            }
-                        } catch (error) {
-                            console.error('Error en captura:', error);
-                            alert('Error procesando el pago: ' + error.message);
-                        }
-                    },
-                    onCancel: function() {
-                        alert('Pago cancelado por el usuario');
-                    },
-                    onError: function(err) {
-                        console.error('PayPal error:', err);
-                        alert('Error en PayPal: ' + (err.message || 'Error desconocido'));
-                    }
-                }).render('#paypal-button-container');
-
-                // Ocultar botón continuar y mostrar PayPal
-                document.getElementById('continuarBtn').style.display = 'none';
-                document.getElementById('paypal-button-container').style.display = 'block';
-
-            } catch (error) {
-                console.error('Error creando orden:', error);
-                alert('Error creando orden de pago: ' + error.message);
-                // Reset button
-                document.getElementById('continuarBtn').innerHTML = '<i class="fas fa-arrow-right"></i> Continuar a Pago';
-                document.getElementById('continuarBtn').disabled = false;
-            }
+            // Enviar formulario a PayPal
+            document.getElementById('paymentForm').submit();
         }
 
         // Event listener para el botón continuar
-        document.getElementById('continuarBtn').onclick = iniciarPago;
+        document.getElementById('continuarBtn').onclick = procesarPago;
 
         // Cerrar modal
         function closeModal() {

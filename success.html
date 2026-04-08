@@ -51,25 +51,43 @@
     </div>
 
     <script>
-        // Obtener detalles de URL query param y localStorage
+        // Obtener detalles de URL query param (PayPal return)
         const urlParams = new URLSearchParams(window.location.search);
-        const orderID = urlParams.get('orderID');
-        const timestamp = urlParams.get('timestamp') || new Date().toLocaleString('es-ES');
+        const paymentStatus = urlParams.get('payment_status');
+        const txnId = urlParams.get('txn_id');
+        const customData = urlParams.get('custom');
         
-        if (orderID) {
-            document.getElementById('orderID').textContent = orderID;
-            document.getElementById('timestamp').textContent = timestamp;
-            
-            // Cargar datos adicionales de localStorage
-            const paymentData = localStorage.getItem('paymentData');
-            if (paymentData) {
-                const data = JSON.parse(paymentData);
-                document.getElementById('cliente').textContent = `${data.formData.nombre} ${data.formData.apellido}`;
-                document.getElementById('email').textContent = data.formData.correo;
-                // Limpiar localStorage después de usar
-                localStorage.removeItem('paymentData');
+        if (paymentStatus === 'Completed' && txnId) {
+            // Parsear datos del formulario del campo custom
+            let formData = {};
+            if (customData) {
+                try {
+                    formData = JSON.parse(customData);
+                } catch (e) {
+                    console.error('Error parsing custom data:', e);
+                }
             }
             
+            document.getElementById('orderID').textContent = txnId;
+            document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
+            
+            if (formData.nombre && formData.apellido) {
+                document.getElementById('cliente').textContent = `${formData.nombre} ${formData.apellido}`;
+            }
+            if (formData.correo) {
+                document.getElementById('email').textContent = formData.correo;
+            }
+            
+            document.getElementById('txDetails').style.display = 'block';
+        } else if (paymentStatus === 'Pending') {
+            document.getElementById('orderID').textContent = txnId || 'Pendiente';
+            document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
+            document.getElementById('txDetails').style.display = 'block';
+            alert('Tu pago está siendo procesado. Recibirás confirmación cuando se complete.');
+        } else {
+            // Si no hay parámetros de PayPal, mostrar mensaje genérico
+            document.getElementById('orderID').textContent = 'Procesando...';
+            document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
             document.getElementById('txDetails').style.display = 'block';
         }
     </script>
