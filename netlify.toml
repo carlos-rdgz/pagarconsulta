@@ -1,12 +1,13 @@
 [build]
-  publish = "."
-  command = "npm install --prefix netlify/functions"
-  functions = "netlify/functions"
+  publish = \".\"
+  command = \"npm install --prefix netlify/functions\"
+  functions = \"netlify/functions\"
 
 [dev]
-  command = "echo 'Visit http://localhost:8000'"
+  command = \"echo 'Visit http://localhost:8000'\"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = \"/*\"
+  to = \"/index.html\"
   status = 200
+  force = false
