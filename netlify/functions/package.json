@@ -1,8 +1,8 @@
 {
-  "name": "paypal-functions",
+  "name": "stripe-functions",
   "version": "1.0.0",
   "dependencies": {
-    "@paypal/paypal-server-sdk": "^1.0.0"
+    "stripe": "^14.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

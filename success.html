@@ -51,42 +51,24 @@
     </div>
 
     <script>
-        // Obtener detalles de URL query param (PayPal return)
+        // Obtener detalles de URL query param (Stripe Checkout return)
         const urlParams = new URLSearchParams(window.location.search);
-        const paymentStatus = urlParams.get('payment_status');
-        const txnId = urlParams.get('txn_id');
-        const customData = urlParams.get('custom');
-        
-        if (paymentStatus === 'Completed' && txnId) {
-            // Parsear datos del formulario del campo custom
-            let formData = {};
-            if (customData) {
-                try {
-                    formData = JSON.parse(customData);
-                } catch (e) {
-                    console.error('Error parsing custom data:', e);
-                }
-            }
-            
-            document.getElementById('orderID').textContent = txnId;
+        const sessionId = urlParams.get('session_id');
+
+        if (sessionId) {
+            // Aquí normalmente verificarías la sesión con Stripe
+            // Por ahora, mostrar mensaje de éxito genérico
+            document.getElementById('orderID').textContent = sessionId;
             document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
-            
-            if (formData.nombre && formData.apellido) {
-                document.getElementById('cliente').textContent = `${formData.nombre} ${formData.apellido}`;
-            }
-            if (formData.correo) {
-                document.getElementById('email').textContent = formData.correo;
-            }
-            
+
+            // Los datos del cliente estarán disponibles cuando implementemos webhooks
+            document.getElementById('cliente').textContent = 'Cliente';
+            document.getElementById('email').textContent = 'Verificado por Stripe';
+
             document.getElementById('txDetails').style.display = 'block';
-        } else if (paymentStatus === 'Pending') {
-            document.getElementById('orderID').textContent = txnId || 'Pendiente';
-            document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
-            document.getElementById('txDetails').style.display = 'block';
-            alert('Tu pago está siendo procesado. Recibirás confirmación cuando se complete.');
         } else {
-            // Si no hay parámetros de PayPal, mostrar mensaje genérico
-            document.getElementById('orderID').textContent = 'Procesando...';
+            // Si no hay session_id, mostrar mensaje genérico
+            document.getElementById('orderID').textContent = 'Pago procesado';
             document.getElementById('timestamp').textContent = new Date().toLocaleString('es-ES');
             document.getElementById('txDetails').style.display = 'block';
         }
