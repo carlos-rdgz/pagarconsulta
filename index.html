@@ -4,161 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Consulta de Abogado - Pago Seguro $100 USD</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://www.paypal.com https://*.paypal.com; frame-src 'self' https://www.paypal.com https://*.paypal.com;">
+    <title>Pago Consulta - $100 USD</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://www.paypal.com/sdk/js?client-id=AZyElkuGTtZOQKbi8ZFTWu7Zl4gbfaWGvBYqPaH4aDX32QFJtlxhc4dfMvle4CSy0zTYH3lsSq2UxtEI&components=card-fields&currency=USD&intent=capture"></script>
     <style>
-        @keyframes fadeInUp { from {opacity: 0; transform: translateY(30px);} to {opacity: 1; transform: translateY(0);} }
-        @keyframes slideInField { from {opacity: 0; transform: translateX(-20px);} to {opacity: 1; transform: translateX(0);} }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f4f6fa 0%, #e8ecf4 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .container { max-width: 500px; width: 100%; background: #fff; border-radius: 18px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2); animation: fadeInUp 0.8s ease-out; }
-        h1 { text-align: center; color: #223366; margin-bottom: 30px; font-size: 28px; font-weight: 700; }
-        .form-group { margin-bottom: 24px; position: relative; animation: slideInField 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
-        .form-group:nth-child(n+2) { animation-delay: 0.2s; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px; }
-        input { width: 100%; height: 48px; padding: 0 16px; border: 2px solid #e5e7eb; border-radius: 12px; background: #f9fafb; font-size: 16px; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        input:focus { outline: none; border-color: #223366; background: #fff; box-shadow: 0 0 0 3px rgba(34,51,102,0.1); }
-        .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 16px; z-index: 2; }
-        input { padding-left: 48px; }
-        #card-number, #card-expiry, #card-cvv { height: 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #f9fafb; margin-bottom: 8px; font-family: 'Poppins', sans-serif; }
-        .card-row { display: flex; gap: 16px; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f6fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 500px; width: 100%; background: white; border-radius: 18px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #223366; margin-bottom: 30px; font-size: 24px; font-weight: 600; }
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; }
+        .form-group input { width: 100%; height: 48px; padding: 0 16px 0 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #fafbfc; font-size: 16px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #223366; }
+        .input-icon { position: absolute; left: 16px; top: 52px; transform: translateY(-50%); color: #9ca3af; z-index: 1; }
+        #card-number, #card-expiry, #card-cvv { height: 48px; border: 2px solid #e5e7eb; border-radius: 12px; background: #fafbfc; margin-bottom: 8px; padding: 0 16px; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        .card-row { display: flex; gap: 12px; }
         .card-row > div { flex: 1; }
-        .submit-btn { width: 100%; height: 52px; background: linear-gradient(135deg, #223366 0%, #1e2a44 100%); color: white; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(34,51,102,0.3); font-family: 'Poppins', sans-serif; }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,51,102,0.4); background: linear-gradient(135deg, #1e2a44 0%, #152233 100%); }
-        .submit-btn:active { transform: translateY(0); }
-        .success-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; }
-        .success-content { background: linear-gradient(135deg, #fff 0%, #f8fafc 100%); padding: 50px 40px; border-radius: 24px; text-align: center; max-width: 420px; width: 90%; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: scale(0.9); animation: modalPop 0.4s ease-out forwards; border: 1px solid rgba(255,255,255,0.3); }
-        @keyframes modalPop { to { transform: scale(1); } }
-        .success-icon { font-size: 64px; color: #10b981; margin-bottom: 20px; animation: bounce 0.6s ease-out; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
-        .success-title { font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 12px; }
-        .success-text { font-size: 16px; color: #6b7280; margin-bottom: 30px; line-height: 1.6; }
-        .close-btn { padding: 14px 32px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
-        .close-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16,185,129,0.4); }
-        @media (max-width: 480px) { .container { padding: 32px 24px; margin: 10px; } }
+        .submit-btn { width: 100%; height: 50px; background: #223366; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; font-family: 'Poppins', sans-serif; }
+        .submit-btn:hover { background: #1e2d50; }
+        .success-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .success-content { background: white; padding: 40px; border-radius: 18px; text-align: center; max-width: 400px; }
+        .success-icon { font-size: 60px; color: #10b981; margin-bottom: 20px; }
+        .success-title { font-size: 24px; color: #111827; margin-bottom: 10px; }
+        .close-btn { background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-gavel"></i> Consulta Legal $100 USD</h1>
+        <h1><i class="fas fa-credit-card"></i> Pagar $100 USD</h1>
         <form id="paymentForm">
             <div class="form-group">
-                <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+                <label>Nombre Completo</label>
                 <i class="fas fa-user input-icon"></i>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" required>
             </div>
             <div class="form-group">
-                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <label>Email</label>
                 <i class="fas fa-envelope input-icon"></i>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" required>
             </div>
             <div class="form-group">
-                <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                <label>Teléfono</label>
                 <i class="fas fa-phone input-icon"></i>
-                <input type="tel" id="telefono" name="telefono" required>
+                <input type="tel" id="telefono" required>
             </div>
             <div class="form-group">
-                <label for="ssn"><i class="fas fa-id-card"></i> Seguro Social</label>
+                <label>Seguro Social (XXX-XX-XXXX)</label>
                 <i class="fas fa-id-card input-icon"></i>
-                <input type="text" id="ssn" name="ssn" placeholder="XXX-XX-XXXX" required>
+                <input type="text" id="ssn" required>
             </div>
             <div class="form-group">
-                <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección Completa</label>
+                <label>Dirección Completa</label>
                 <i class="fas fa-map-marker-alt input-icon"></i>
-                <input type="text" id="direccion" name="direccion" required>
+                <input type="text" id="direccion" required>
             </div>
             <div class="form-group">
-                <label>Tarjeta de Crédito (Segura - PayPal)</label>
+                <label>Número de Tarjeta</label>
                 <div id="card-number"></div>
             </div>
             <div class="form-group">
-                <label class="visually-hidden">Vencimiento / CVV</label>
+                <label>Vencimiento y CVV</label>
                 <div class="card-row">
                     <div id="card-expiry"></div>
                     <div id="card-cvv"></div>
                 </div>
             </div>
-            <button type="submit" class="submit-btn" id="pay-button">
-                <i class="fas fa-credit-card"></i> Pagar $100.00 USD Ahora
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-lock"></i> Pagar $100.00 USD
             </button>
         </form>
     </div>
     <div id="successModal" class="success-modal">
         <div class="success-content">
             <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-            <h2 class="success-title">¡Pago Confirmado!</h2>
-            <p class="success-text">Tu pago de $100 USD ha sido procesado exitosamente. Tu consulta está programada y recibirás confirmación por email en minutos.</p>
-            <button class="close-btn" onclick="closeModal()">Finalizar</button>
+            <h2 class="success-title">¡Pago Exitoso!</h2>
+            <p>Tu pago ha sido procesado. Consulta confirmada.</p>
+            <button class="close-btn" onclick="closeModal()">Listo</button>
         </div>
     </div>
     <script>
-        let cardFields = null;
-        const form = document.getElementById('paymentForm');
-        const payButton = document.getElementById('pay-button');
-        const successModal = document.getElementById('successModal');
-        
-        function initPayPal() {
+        let cardFields;
+        document.addEventListener('DOMContentLoaded', function() {
             if (typeof paypal === 'undefined') {
-                setTimeout(initPayPal, 100);
+                console.error('PayPal SDK not loaded');
                 return;
             }
-            if (!paypal.CardFields().isEligible()) {
-                alert('PayPal Card Fields no disponibles en este navegador');
-                return;
-            }
-            cardFields = paypal.CardFields({
-                createOrder: function() {
-                    return fetch('/create-order', {method: 'POST'})
-                        .then(res => res.json())
-                        .then(data => data.id)
-                        .catch(err => { console.error(err); throw err; });
-                },
-                onApprove: function(data) {
-                    return fetch('/capture-order', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            orderID: data.orderID
-                        })
-                    }).then(res => res.json()).then(details => {
-                        successModal.style.display = 'flex';
-                        form.reset();
-                        payButton.disabled = false;
-                    }).catch(err => console.error('Capture error:', err));
-                },
-                onError: function(err) {
-                    console.error('PayPal error:', err);
-                    payButton.disabled = false;
-                },
-                fields: {
-                    number: {
-                        placeholders: { text: '**####' }
+            if (paypal.CardFields().isEligible()) {
+                cardFields = paypal.CardFields({
+                    createOrder: function() {
+                        return fetch('/create-order', {method: 'POST'}).then(r => r.json()).then(data => data.id);
+                    },
+                    onApprove: function(data) {
+                        return fetch('/capture-order', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({orderID: data.orderID})
+                        }).then(r => r.json()).then(() => {
+                            document.getElementById('successModal').style.display = 'flex';
+                        });
                     }
-                }
-            });
-            cardFields.render('#card-number', 'number');
-            cardFields.render('#card-expiry', 'expiry');
-            cardFields.render('#card-cvv', 'cvv');
-        }
+                });
+                cardFields.render('#card-number', 'number');
+                cardFields.render('#card-expiry', 'expiry');
+                cardFields.render('#card-cvv', 'cvv');
+            } else {
+                console.error('PayPal Card Fields not eligible');
+            }
+        });
         
-        form.addEventListener('submit', function(e) {
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            payButton.disabled = true;
             cardFields.submit();
         });
         
-        payButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            form.dispatchEvent(new Event('submit'));
-        });
-        
         function closeModal() {
-            successModal.style.display = 'none';
+            document.getElementById('successModal').style.display = 'none';
         }
-        
-        window.addEventListener('load', initPayPal);
     </script>
 </body>
 </html>
