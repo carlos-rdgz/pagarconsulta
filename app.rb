@@ -8,32 +8,17 @@ Dotenv.load
 CLIENT_ID = ENV['PAYPAL_CLIENT_ID'] || 'AZyElkuGTtZOQKbi8ZFTWu7Zl4gbfaWGvBYqPaH4aDX32QFJtlxhc4dfMvle4CSy0zTYH3lsSq2UxtEI'
 SECRET = ENV['PAYPAL_SECRET'] || 'EEvN2L8NGM8sQdM7LmghQGL5-dv_0Fya7NufiLoU2ktn2jATiOXihyIXT9DIOi9wbDpXpKgFSl4yNQJo'
 
-def paypal_auth
+def get_paypal_token
   uri = URI('https://api-m.sandbox.paypal.com/v1/oauth2/token')
   req = Net::HTTP::Post.new(uri)
   req.basic_auth CLIENT_ID, SECRET
   req.set_form_data('grant_type' => 'client_credentials')
-  
-  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-    http.request(req)
-  end
+  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http| http.request(req) }
   JSON.parse(res.body)['access_token']
 end
 
-post '/create-setup-token' do
-  token = paypal_auth
-  # For hosted-fields setup token if needed
-  {token: token}.to_json
-end
-
-post '/process-payment' do
-  data = JSON.parse(request.body.read)
-  form_data = data['form_data']
-  card_data = data['card_data']
-  
-  token = paypal_auth
-  
-  # Create order
+post '/create-order' do
+  token = get_paypal_token
   uri = URI('https://api-m.sandbox.paypal.com/v2/checkout/orders')
   req = Net::HTTP::Post.new(uri)
   req['Authorization'] = "Bearer #{token}"
@@ -43,32 +28,35 @@ post '/process-payment' do
     purchase_units: [{
       amount: {
         currency_code: 'USD',
-value: '100.00'
-      },
-      payment_source: {
-        card: {
-          # From hostedFields.tokenize(): number, expiry, security_code, name, billing_address
-          # Note: hostedFields returns tokenized payload, use billing_address from form_data
-          name: form_data['nombre_tarjeta'] || form_data['nombre'],
-          number: card_data['nonce'] , # Use nonce or raw? For v2, need raw card data? Wait, hosted-fields returns payment_method_nonce
-          # Actually, for hosted-fields, backend receives device_data or nonce, but for PayPal, use payment_method_nonce in payment_source
-        }
+        value: '100.00'
       }
     }]
   }.to_json
   
-  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-    http.request(req)
-  end
+  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http| http.request(req) }
   
   result = JSON.parse(res.body)
+  status res.code.to_i
+  result.to_json
+end
+
+post '/capture-order' do
+  order_id = JSON.parse(request.body.read)['orderID']
+  token = get_paypal_token
+  uri = URI("https://api-m.sandbox.paypal.com/v2/checkout/orders/#{order_id}/capture")
+  req = Net::HTTP::Post.new(uri)
+  req['Authorization'] = "Bearer #{token}"
+  req['Content-Type'] = 'application/json'
   
-  content_type :json
-  {success: res.code == '201', order_id: result['id'], error: result['message']}.to_json
+  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) {|http| http.request(req) }
+  
+  result = JSON.parse(res.body)
+  status res.code.to_i
+  result.to_json
 end
 
 get '/' do
-  'PayPal Backend Ready - ruby app.rb'
+  'Sinatra PayPal Backend Ready (sandbox) - Run: ruby app.rb'
 end
 
 run Sinatra::Application
